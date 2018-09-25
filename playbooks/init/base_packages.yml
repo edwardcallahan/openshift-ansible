@@ -47,4 +47,5 @@
         pkg_list_use_non_fedora: "{{ ansible_distribution != 'Fedora' | bool }}"
         pkg_list: "{{ pkg_list_non_fedora | ternary(pkg_list_non_fedora, []) + pkg_list_temp }}"
       register: result
+      become: yes
       until: result is succeeded

@@ -1,10 +1,12 @@
-# Create an OSEv3 group that contains the masters, nodes, and etcd groups
+#Create an OSEv3 group that contains the masters, nodes, and etcd groups
 [OSEv3:children]
 masters
 nodes
 etcd
 
 # Set variables common for all OSEv3 hosts
+# https://docs.openshift.com/container-platform/3.10/install/configuring_inventory_file.html#configuring-cluster-variables
+
 [OSEv3:vars]
 # SSH user, this user should allow ssh based auth without requiring a password
 ansible_ssh_user=ec2-user
@@ -24,14 +26,15 @@ openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'cha
 
 # host group for masters
 [masters]
-ip-10-0-71-212.us-west-2.compute.internal
+ip-10-0-63-112.us-west-2.compute.internal
 
 # host group for etcd
 [etcd]
-ip-10-0-71-212.us-west-2.compute.internal
+ip-10-0-63-112.us-west-2.compute.internal
 
 # host group for nodes, includes region info
 [nodes]
-ip-10-0-71-212.us-west-2.compute.internal openshift_node_group_name='node-config-master'
-ip-10-0-95-87.us-west-2.compute.internal openshift_node_group_name='node-config-compute'
-ip-10-0-95-72.us-west-2.compute.internal openshift_node_group_name='node-config-compute'
+ip-10-0-63-112.us-west-2.compute.internal openshift_node_group_name='node-config-master'
+ip-10-0-50-224.us-west-2.compute.internal openshift_node_group_name='node-config-compute'
+ip-10-0-55-116.us-west-2.compute.internal openshift_node_group_name='node-config-compute'
+

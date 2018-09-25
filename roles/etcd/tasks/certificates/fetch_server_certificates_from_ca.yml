@@ -6,6 +6,7 @@
   when:
   - not etcd_is_atomic | bool
   register: result
+  become: true
   until: result is succeeded
 
 - name: Check status of etcd certificates

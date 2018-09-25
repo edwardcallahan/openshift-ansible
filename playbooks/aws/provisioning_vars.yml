@@ -25,15 +25,16 @@ openshift_master_api_port: 8443
 
 # specify a clusterid
 # This value is also used as the default value for many other components.
-openshift_aws_clusterid: fdp-01
+openshift_aws_clusterid: fdp-02
+openshift_clusterid: fdp-02
 
 # AWS region
 # This value will instruct the plays where all items should be created.
 # Multi-region deployments are not supported using these plays at this time.
 openshift_aws_region: us-west-2
 
-#openshift_aws_create_launch_config: true
-#openshift_aws_create_scale_group: true
+openshift_aws_create_launch_config: false
+openshift_aws_create_scale_group: false
 
 # --- #
 # VPC #
@@ -47,19 +48,19 @@ openshift_aws_create_vpc: true
 # openshift_aws_vpc will be created
 openshift_aws_vpc:
   name: "{{ openshift_aws_vpc_name }}"
-  cidr: 172.31.0.0/16
+  cidr: 10.0.0.0/16
   subnets:
-    us-east-1:
-    - cidr: 172.31.48.0/20
+    us-west-2:
+    - cidr: 10.0.48.0/20
       az: "us-west-2a"
       default_az: true
-    - cidr: 172.31.32.0/20
+    - cidr: 10.0.32.0/20
       az: "us-west-2b"
-    - cidr: 172.31.16.0/20
+    - cidr: 10.0.16.0/20
       az: "us-west-2c"
 
 # Name of the vpc.  Needs to be set if using a pre-existing vpc.
-#openshift_aws_vpc_name: "{{ openshift_aws_clusterid }}"
+openshift_aws_vpc_name: "{{ openshift_aws_clusterid }}"
 
 # Name of the subnet in the vpc to use.  Needs to be set if using a pre-existing
 # vpc + subnet. Otherwise will use the subnet with 'default_az' set (see above
