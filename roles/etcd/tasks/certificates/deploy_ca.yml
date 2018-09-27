@@ -21,6 +21,7 @@
   - "{{ etcd_ca_dir }}/fragments"
   delegate_to: "{{ etcd_ca_host }}"
   run_once: true
+  become: true
 
 - command: cp /etc/pki/tls/openssl.cnf ./
   args:
