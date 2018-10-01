@@ -33,6 +33,7 @@
     - deployment_type is defined
 
   - name: check for node already bootstrapped
+    become: true
     stat:
       path: "/etc/origin/node/bootstrap-node-config.yaml"
       get_checksum: false

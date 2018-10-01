@@ -3,7 +3,7 @@
   ec2_elb_facts:
     region: "{{ openshift_aws_region }}"
     names:
-    - "{{ openshift_aws_elb_dict['master']['internal']['name'] }}"
+    - "fdp-03-external-master"
   delegate_to: localhost
   register: elbs
 

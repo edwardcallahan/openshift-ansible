@@ -101,6 +101,7 @@
     src: "{{ mktemp.stdout }}/{{ item }}"
     dest: "{{ etcd_static_pod_location }}"
     mode: 0600
+  become: true
   with_items:
   - etcd.yaml
 
@@ -109,3 +110,4 @@
     state: absent
     name: "{{ mktemp.stdout }}"
   changed_when: False
+  become: true
