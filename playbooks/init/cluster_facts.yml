@@ -24,7 +24,8 @@
     - "groups.oo_first_master | length > 0"
     - "'openshift_portal_net' in hostvars[groups.oo_first_master.0]"
 
-  - name: Gather Cluster facts
+  - name: Gather Cluster Facts
+    become: yes
     openshift_facts:
       role: common
       local_facts:
@@ -58,6 +59,7 @@
     - openshift_generate_no_proxy_hosts | default(True) | bool
 
   - name: Initialize openshift.node.sdn_mtu
+    become: yes
     openshift_facts:
       role: node
       local_facts:

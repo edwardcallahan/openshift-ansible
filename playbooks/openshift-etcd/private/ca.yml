@@ -1,6 +1,7 @@
 ---
 - name: Generate new etcd CA
   hosts: oo_first_etcd
+  become: true
   tasks:
   - import_role:
       name: etcd

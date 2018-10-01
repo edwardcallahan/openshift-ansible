@@ -8,6 +8,7 @@
 - name: Install etcd
   package: name=etcd state=present
   register: result
+  become: true
   until: result is succeeded
 
 - import_tasks: drop_etcdctl.yml

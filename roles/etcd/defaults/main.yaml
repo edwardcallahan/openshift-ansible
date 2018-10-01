@@ -28,6 +28,7 @@ etcd_image: "{{ osm_etcd_image }}"
 etcdctl_dict:
   host: 'etcdctl'
   docker: 'docker exec etcd_container etcdctl'
+  become: true
   static_pod: '/usr/local/bin/master-exec etcd etcd etcdctl'
   runc: 'runc exec etcd etcdctl'
 r_etcd_common_etcdctl_command: "{{ etcdctl_dict[r_etcd_common_etcd_runtime | default('runc')] }}"

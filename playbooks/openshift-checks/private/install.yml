@@ -24,6 +24,7 @@
   - name: Run health checks (install) - EL
     when: ansible_distribution != "Fedora"
     action: openshift_health_check
+    become: true
     args:
       checks:
       - disk_availability

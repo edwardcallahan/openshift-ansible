@@ -6,11 +6,13 @@
     get_attributes: false
     get_mime: false
   register: master_config_path_check
+  become: true
 
 - slurp:
     src: "/etc/origin/master/master-config.yaml"
   register: openshift_master_config_encoded_contents
   when: master_config_path_check.stat.exists
+  become: true
 
 # The existing config will also be used to determine first node selector on
 # first master.

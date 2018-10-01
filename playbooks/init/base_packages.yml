@@ -42,4 +42,5 @@
       - "{{ 'python3-docker' if ansible_distribution == 'Fedora' else 'python-docker' }}"
       when: item != ''
       register: result
+      become: yes
       until: result is succeeded

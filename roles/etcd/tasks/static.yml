@@ -28,12 +28,14 @@
     path: "{{ etcd_data_dir }}"
     state: directory
     mode: 0700
+  become: true
 
 - name: Validate permissions on the config dir
   file:
     path: "{{ etcd_conf_dir }}"
     state: directory
     mode: 0700
+  become: true
 
 - name: Validate permissions on the static pods dir
   file:
@@ -42,12 +44,15 @@
     owner: "root"
     group: "root"
     mode: 0700
+  become: true
+
 
 - name: Write etcd global config file
   template:
     src: etcd.conf.j2
     dest: "{{ etcd_conf_file }}"
     backup: true
+  become: true
 
 - name: Create temp directory for static pods
   command: mktemp -d /tmp/openshift-ansible-XXXXXX
