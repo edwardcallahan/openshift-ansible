@@ -1,5 +1,6 @@
 ---
 - name: Configure etcd profile.d aliases
+  become: true
   template:
     dest: "/etc/profile.d/etcdctl.sh"
     src: etcdctl.sh.j2

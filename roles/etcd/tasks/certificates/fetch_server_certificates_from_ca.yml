@@ -6,6 +6,7 @@
   when:
   - not etcd_is_atomic | bool
   register: result
+  become: true
   until: result is succeeded
 
 - name: Check status of etcd certificates
@@ -19,6 +20,7 @@
   - "{{ etcd_cert_config_dir }}/{{ etcd_cert_prefix }}peer.crt"
   - "{{ etcd_cert_config_dir }}/{{ etcd_cert_prefix }}ca.crt"
   register: g_etcd_server_cert_stat_result
+  become: true
   when: not etcd_certificates_redeploy | default(false) | bool
 
 - set_fact:
@@ -33,6 +35,7 @@
     path: "{{ etcd_generated_certs_dir }}/{{ etcd_cert_subdir }}"
     state: directory
     mode: 0700
+  become: true
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
 
@@ -51,6 +54,7 @@
     SAN: "IP:{{ etcd_ip }},DNS:{{ etcd_hostname }}"
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 # Certificates must be signed serially in order to avoid competing
 # for the serial file.
@@ -69,6 +73,7 @@
     SAN: "IP:{{ etcd_ip }}"
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 - name: Create the peer csr
   command: >
@@ -85,6 +90,7 @@
     SAN: "IP:{{ etcd_ip }},DNS:{{ etcd_hostname }}"
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 # Certificates must be signed serially in order to avoid competing
 # for the serial file.
@@ -103,6 +109,7 @@
     SAN: "IP:{{ etcd_ip }}"
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 - file:
     src: "{{ etcd_ca_cert }}"
@@ -111,6 +118,7 @@
     force: yes
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 - name: Create a tarball of the etcd certs
   command: >
@@ -123,6 +131,7 @@
     warn: no
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 - name: Retrieve etcd cert tarball
   fetch:
@@ -132,6 +141,7 @@
     validate_checksum: yes
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 - name: Ensure certificate directory exists
   file:
@@ -140,12 +150,14 @@
   with_items:
   - "{{ etcd_cert_config_dir }}"
   when: etcd_server_certs_missing | bool
+  become: true
 
 - name: Unarchive cert tarball
   unarchive:
     src: "/tmp/{{ inventory_hostname }}/{{ etcd_generated_certs_dir }}/{{ etcd_cert_subdir }}.tgz"
     dest: "{{ etcd_cert_config_dir }}"
   when: etcd_server_certs_missing | bool
+  become: true
 
 - name: Create a tarball of the etcd ca certs
   command: >
@@ -156,6 +168,7 @@
     warn: no
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 - name: Retrieve etcd ca cert tarball
   fetch:
@@ -165,6 +178,7 @@
     validate_checksum: yes
   when: etcd_server_certs_missing | bool
   delegate_to: "{{ etcd_ca_host }}"
+  become: true
 
 - name: Ensure ca directory exists
   file:
@@ -173,11 +187,13 @@
   with_items:
   - "{{ etcd_ca_dir }}"
   when: etcd_server_certs_missing | bool
+  become: true
 
 - name: Delete temporary directory
   local_action: file path="/tmp/{{ inventory_hostname }}" state=absent
   changed_when: False
   when: etcd_server_certs_missing | bool
+  become: true
 
 - name: Validate permissions on certificate files
   file:
@@ -188,6 +204,7 @@
   - "{{ etcd_ca_file }}"
   - "{{ etcd_cert_file }}"
   - "{{ etcd_key_file }}"
+  become: true
 
 - name: Validate permissions on peer certificate files
   file:
@@ -198,9 +215,11 @@
   - "{{ etcd_peer_ca_file }}"
   - "{{ etcd_peer_cert_file }}"
   - "{{ etcd_peer_key_file }}"
+  become: true
 
 - name: Validate permissions on the config dir
   file:
     path: "{{ etcd_conf_dir }}"
     state: directory
     mode: 0700
+  become: true

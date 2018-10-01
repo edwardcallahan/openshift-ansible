@@ -9,6 +9,7 @@
       port: "{{ item.port.split('/')[0] }}"
     when: item.cond | default(True)
     with_items: "{{ r_etcd_os_firewall_allow }}"
+    become: true
 
   - name: Remove iptables rules
     os_firewall_manage_iptables:
@@ -18,6 +19,7 @@
       port: "{{ item.port.split('/')[0] }}"
     when: item.cond | default(True)
     with_items: "{{ r_etcd_os_firewall_deny }}"
+    become: true
 
 - when: r_etcd_firewall_enabled | bool and r_etcd_use_firewalld | bool
   block:
@@ -29,6 +31,7 @@
       state: enabled
     when: item.cond | default(True)
     with_items: "{{ r_etcd_os_firewall_allow }}"
+    become: true
 
   - name: Remove firewalld allow rules
     firewalld:
@@ -38,3 +41,4 @@
       state: disabled
     when: item.cond | default(True)
     with_items: "{{ r_etcd_os_firewall_deny }}"
+    become: true
